@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<th>Título</th>
+<th>Autor</th>
+<th>Ano</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="livros-list"></tbody>
+</table>
+</section>
+</main>
+
+
+<script>
+const token = localStorage.getItem('token');
+if (!token) {
+window.location.href = 'login.html';
+}
+
+
+async function carregarLivros() {
+const res = await fetch('/books', {
+headers: { Authorization: `Bearer ${token}` }
+});
+const data = await res.json();
+const tbody = document.getElementById('livros-list');
+tbody.innerHTML = '';
+data.forEach(livro => {
+const tr = document.createElement('tr');
+tr.innerHTML = `
+<td>${livro.titulo}</td>
+<td>${livro.autor}</td>
+<td>${livro.ano}</td>
+<td><button onclick="removerLivro(${livro.id})">🗑️</button></td>
+`;
+tbody.appendChild(tr);
+});
+}
+
+
+document.getElementById('add-book-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const titulo = document.getElementById('titulo').value;
+const autor = document.getElementById('autor').value;
+const ano = document.getElementById('ano').value;
+
+
+await fetch('/books', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+Authorization: `Bearer ${token}`
+},
+body: JSON.stringify({ titulo, autor, ano })
+});
+carregarLivros();
+});
+
+
+async function removerLivro(id) {
+await fetch(`/books/${id}`, {
+method: 'DELETE',
+headers: { Authorization: `Bearer ${token}` }
+});
+carregarLivros();
+}
+
+
+document.getElementById('logout').addEventListener('click', () => {
+localStorage.removeItem('token');
+window.location.href = 'login.html';
+});
+
+
+carregarLivros();
+</script>
+</body>
+</html>
