@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema BibliotecaPlus</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --dark: #2c3e50;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --sidebar-width: 250px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { display: flex; min-height: 100vh; background: var(--light); }
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar h2 { text-align: center; margin-bottom: 30px; }
+    .menu a {
+      display: block;
+      padding: 12px;
+      color: white;
+      text-decoration: none;
+      margin: 5px 0;
+      border-radius: 8px;
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+    .menu a:hover { background: rgba(255,255,255,0.1); }
+    /* Main Content */
+    .main { flex: 1; padding: 20px; }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th { background: var(--secondary); color: white; }
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-add { background: var(--success); color: white; }
+    .btn-edit { background: var(--warning); color: white; }
+    .btn-delete { background: var(--danger); color: white; }
+    /* Livros com imagens */
+    .book-cover { width: 50px; border-radius: 5px; }
+    /* Esconde seções */
+    section { display: none; }
+    section.active { display: block; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>📚 Biblioteca</h2>
+    <nav class="menu">
+      <a onclick="showSection('livros')"><i class="fa-solid fa-book"></i> Livros</a>
+      <a onclick="showSection('usuarios')"><i class="fa-solid fa-user"></i> Usuários</a>
+      <a onclick="showSection('emprestimos')"><i class="fa-solid fa-handshake"></i> Empréstimos</a>
+      <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <!-- LIVROS -->
+    <section id="livros" class="active">
+      <div class="header">
+        <h1>Gerenciamento de Livros</h1>
+        <button class="btn btn-add"><i class="fa-solid fa-plus"></i> Adicionar Livro</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Capa</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Gênero</th>
+            <th>Ano</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img src="https://m.media-amazon.com/images/I/81t2CVWEsUL._AC_UF1000,1000_QL80_.jpg" class="book-cover"></td>
+            <td>O Senhor dos Anéis</td>
+            <td>J.R.R. Tolkien</td>
+            <td>Fantasia</td>
+            <td>1954</td>
+            <td>
+              <button class="btn btn-edit"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="https://m.media-amazon.com/images/I/71aFt4+OTOL._AC_UF1000,1000_QL80_.jpg" class="book-cover"></td>
+            <td>Harry Potter e a Pedra Filosofal</td>
+            <td>J.K. Rowling</td>
+            <td>Fantasia</td>
+            <td>1997</td>
+            <td>
+              <button class="btn btn-edit"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- USUÁRIOS -->
+    <section id="usuarios">
+      <div class="header">
+        <h1>Gerenciamento de Usuários</h1>
+        <button class="btn btn-add"><i class="fa-solid fa-user-plus"></i> Adicionar Usuário</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Maria Silva</td>
+            <td>maria@email.com</td>
+            <td>Aluno</td>
+            <td>
+              <button class="btn btn-edit"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-delete"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- EMPRÉSTIMOS -->
+    <section id="emprestimos">
+      <div class="header">
+        <h1>Controle de Empréstimos</h1>
+        <button class="btn btn-add"><i class="fa-solid fa-handshake"></i> Novo Empréstimo</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Usuário</th>
+            <th>Livro</th>
+            <th>Data Retirada</th>
+            <th>Data Devolução</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Maria Silva</td>
+            <td>O Senhor dos Anéis</td>
+            <td>10/09/2025</td>
+            <td>20/09/2025</td>
+            <td>✅ Entregue</td>
+          </tr>
+          <tr>
+            <td>João Santos</td>
+            <td>Harry Potter</td>
+            <td>12/09/2025</td>
+            <td>22/09/2025</td>
+            <td>⏳ Em andamento</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+    }
+    function logout() {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
